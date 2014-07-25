@@ -50,18 +50,28 @@ The function needs to return the total number of seconds required to get to X co
 ###
 
 exports.answer = (cost, increment, required) ->
-  return 0
+  [C, F, X] = [cost, increment, required]
 
+  p = (n) -> 2 + n * F
+  t = (n) ->
+    ss =
+      if n > 0
+        C * ([0..n-1].map (i) -> 1/p(i)).reduce (a, b) -> a + b
+      else
+        0
+    return X/p(n) + ss
 
-main = ->
-  rl = readline.createInterface
-    input: process.stdin,
-    output: process.stdout
+  return Math.min ([0..1000].map t)...
 
-  rl.question 'Enter the cost of a cookie farm: ', (c) ->
-    rl.question 'Enter how many cookies get produces by each farm per second: ', (f) ->
-      rl.question 'Enter the total number of cookies required: ', (x) ->
-        console.log "Total time to get #{+x} cookies = #{exports.answer(+c, +f, +x)} sec."
-        rl.close()
+# main = ->
+#   rl = readline.createInterface
+#     input: process.stdin,
+#     output: process.stdout
 
-main()
+#   rl.question 'Enter the cost of a cookie farm: ', (c) ->
+#     rl.question 'Enter how many cookies get produces by each farm per second: ', (f) ->
+#       rl.question 'Enter the total number of cookies required: ', (x) ->
+#         console.log "Total time to get #{+x} cookies = #{exports.answer(+c, +f, +x)} sec."
+#         rl.close()
+
+# main()
